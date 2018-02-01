@@ -1,0 +1,78 @@
+
+.wrapper {
+  width: 640px;
+  margin: 0 auto;
+  height: 100%;
+  background-color: #fff;
+}
+
+.page-title {
+  padding: 10px 15px;
+  font-size: 18px;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.add-note-box {
+  width: 90%;
+  margin: 20px auto auto;  
+  border-bottom: 1px solid #f2f2f2;
+
+  .el-input {
+    width: 480px;
+  }
+}
+
+.tags {
+  padding: 15px 5% 0;
+  text-align: right;
+
+  span {
+    cursor: pointer;
+    margin-left: 5px;
+  }
+}
+
+.note-lists {
+  padding: 10px 5%;
+  height: calc(100% - 20px);
+  background-color: #fcfcfc;
+  overflow: auto;
+}
+
+.el-checkbox-group label {
+  border-bottom: 1px dotted #ccc;
+  padding: 15px 30px 15px 0;
+  display: block;
+  margin-left: 0;
+  position: relative;
+}
+
+.del-btn {
+  position: absolute;
+  right: 0;
+  top: 18px;
+
+  &:hover {
+    color: #409eff;
+  }
+}
+
+.empty-tips {
+  color: #888;
+  margin-top: 15px;
+}
+
+#todo-btn {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  display: block;
+  text-align: center;
+  background-color: #e96900;
+  color: #fff;
+  font-size: 12px;
+  border-radius: 50%;
+  position: fixed;
+  top: 20px;
+  right: 20px;
+}
