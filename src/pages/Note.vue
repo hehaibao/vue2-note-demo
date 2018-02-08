@@ -8,12 +8,14 @@
 			      <a href="javascript:;" @click="add" class="notes-head-edit"><i class="el-icon-plus"></i></a>
 			    </el-tooltip>
   			</div>
-  			<div class="notes-item-box">
-  				<p class="notes-item-time">{{ items.noteDate }}</p>
-  				<div class="notes-item-title-out notes-item-title-out-select-true">
-  					<div class="notes-item-title">{{ items.noteDesc }}</div>
-  				</div>
-  			</div>
+  			<ul class="notes-item-box">
+  				<li v-for="item in items">
+	  				<p class="notes-item-time">{{ item.noteDate }}</p>
+	  				<div class="notes-item-title-out notes-item-title-out-select-true">
+	  					<div class="notes-item-title">{{ item.noteDesc }}</div>
+	  				</div>
+  				</li>
+  			</ul>
   		</el-aside>
 
   		<el-main>
@@ -21,8 +23,8 @@
   				<div class="notes-time">
 	  				<div class="notes-time-text">{{ currentDate }}</div>
 				</div>
-				<div class="notes-content" v-model="items.noteDesc" @keyup="changeDesc($event)" contenteditable="true">
-					{{ items.noteDesc }}
+				<div class="notes-content">
+					<textarea placeholder="请输入内容..." v-model="desc" @keyup="changeDesc">{{ desc }}</textarea>
 				</div>
 				<div class="notes-bottom-box">
 					<div class="notes-bottom">
@@ -40,12 +42,32 @@
 </style>
 
 <script>
+  Date.prototype.format = function(fmt) { 
+	     var o = { 
+	        "M+" : this.getMonth()+1,                 //月份 
+	        "d+" : this.getDate(),                    //日 
+	        "h+" : this.getHours(),                   //小时 
+	        "m+" : this.getMinutes(),                 //分 
+	        "s+" : this.getSeconds(),                 //秒 
+	        "q+" : Math.floor((this.getMonth()+3)/3), //季度 
+	        "S"  : this.getMilliseconds()             //毫秒 
+	    }; 
+	    if(/(y+)/.test(fmt)) {
+	            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length)); 
+	    }
+	     for(var k in o) {
+	        if(new RegExp("("+ k +")").test(fmt)){
+	             fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+	         }
+	     }
+	    return fmt; 
+	}
+
   export default {
 	  	data() {
 	        return {
-	        	items: [
-	        		{ noteDate: '', noteDesc: '' }
-	        	],
+	        	items: [],
+	        	desc: '',
 	        	currentDate: ''
 	        }
 	    },
@@ -55,16 +77,17 @@
 	    methods: {
 	        async initData() {
 	            // 初始化
-	            this.items.noteDate = '2018/1/30';
-	            this.items.noteDesc = '无标题内容';
-	            this.currentDate = '2018/1/30 下午4:32:02';
+	            this.items = [{ noteDate: new Date().format("yyyy-MM-dd"), noteDesc: '无标题内容' }];
+	            this.currentDate = new Date().format("yyyy-MM-dd hh:mm:ss");
+	            console.log(this.items);
 	        },
 	        changeDesc() {
-	        	console.log(1);
+	        	// 内容变更
+	        	this.items[0].noteDesc = this.desc ? this.desc : '无标题内容';
 	        },
 	        add() {
 	        	// 新增笔记
-	        	console.log(this.items)
+	        	this.items.push({ noteDate: new Date().format("yyyy-MM-dd"), noteDesc: '无标题内容' });
 	        },
 	        save() {
 	        	// 保存笔记
