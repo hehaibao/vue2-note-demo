@@ -15,21 +15,23 @@
     </div>
 
     <div class="tags">
-      <a @click="all"><el-tag>全部 {{ allCount }}</el-tag></a>
-      <a @click="todo"><el-tag type="warning">待完成 {{ todoCount }}</el-tag></a>
-      <a @click="done"><el-tag type="success">已完成 {{ doneCount }}</el-tag></a>
+      <a @click="changeType('all')"><el-tag>全部 {{ allCount }}</el-tag></a>
+      <a @click="changeType('todo')"><el-tag type="warning">待完成 {{ todoCount }}</el-tag></a>
+      <a @click="changeType('done')"><el-tag type="success">已完成 {{ doneCount }}</el-tag></a>
     </div>
 
     <div class="note-lists">
-      <el-checkbox-group v-if="lists && lists.length" v-model="checkedList">
-        <el-checkbox v-for="item in lists" @change="handleItemsChange(item)" :checked="item.checked" :label="item.title" :key="item.title" class="ellipsis">
-          {{ item.title }} 
+       <ul v-if="lists && lists.length">
+        <li v-for="(item, index) in lists" v-model="checkedList" :key="item.title" :label="item.title">
+          <el-checkbox class="ellipsis" :checked="item.checked" @change="handleItemsChange(item)">
+            {{ item.title }}
+          </el-checkbox>
 
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
             <i class="el-icon-delete del-btn" @click.prevent.self="remove(item)"></i>
           </el-tooltip>
-        </el-checkbox>
-      </el-checkbox-group>
+        </li>
+      </ul>
 
       <p class="empty-tips" v-else>暂无待办事项</p>
     </div>
@@ -56,39 +58,34 @@
       computed: {
         lists() {
             // 根据条件筛选列表
-            if(this.type == 'all') {
-                return this.list.filter(function(item) {
-                    return true;
-                });
-            } 
-            else if(this.type == 'done') {
-                return this.list.filter(function(item) {
-                    return item.checked;
-                });
-            } 
-            else if(this.type == 'todo') {
-                return this.list.filter(function(item) {
-                    return !item.checked;
-                });
+            switch(this.type) {
+              case 'all':
+                // 全部
+                return this.list;
+              break;
+              case 'todo':
+                // 待完成
+                return this.list.filter(todo => !todo.checked);
+              break;
+              case 'done':
+                // 已完成
+                return this.list.filter(todo => todo.checked);
+              break;
             }
         },
         allCount() {
             // 总数量
             return this.list.length;
         },
-        doneCount() {
-            // 已完成数量
-            let doneArr = this.list.filter(function(item) {
-                return item.checked;
-            });
-            return doneArr.length;
-        },
         todoCount() {
             // 待完成数量
-            let todoArr = this.list.filter(function(item) {
-                return !item.checked;
-            });
+            let todoArr = this.list.filter(todo => !todo.checked);
             return todoArr.length;
+        },
+        doneCount() {
+            // 已完成数量
+            let doneArr = this.list.filter(todo => todo.checked);
+            return doneArr.length;
         }
       },
 	    mounted() {
@@ -99,38 +96,22 @@
 	        async initData() {
               // 造数据
 	            this.list = [
-                {title: '4. 09:30 开晨会', checked: true},
-                {title: '3. 公有云 增加新功能', checked: false},
-                {title: '2. 私有云 增加直播', checked: false},
-                {title: '1. Vue学习', checked: false}
+                { title: '5. 签到', checked: true },
+                { title: '4. 09:30 开晨会', checked: false },
+                { title: '3. 公有云 增加新功能', checked: false },
+                { title: '2. 私有云 增加直播', checked: false },
+                { title: '1. Vue学习', checked: false }
               ];
               this.type = 'all'; // 默认展示全部的
 	        },
-          all() {
-              // 全部
-              if(this.type != 'all') {
-                this.checkedList = [];
-              }
-              this.type = 'all';
-          },
-          done() {
-              // 已完成
-              if(this.type != 'done') {
-                this.checkedList = [];
-              }
-              this.type = 'done';
-          },
-          todo() {
-              // 待完成
-              if(this.type != 'todo') {
-                this.checkedList = [];
-              }
-              this.type = 'todo';
-          },    
+          changeType(tp) {
+              // 切换类型
+              this.type = tp;
+          },  
           handleItemsChange(value) {
               // 多选框 change时触发
-              let index = this.list.indexOf(value);
-              this.$set(this.list[index], `checked`, !value.checked);
+              this.type = this.type;
+              value.checked = !value.checked;
           },
           add() {
             // 添加待办事项

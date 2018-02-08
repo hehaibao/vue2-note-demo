@@ -39,18 +39,23 @@
   overflow: auto;
 }
 
-.el-checkbox-group label {
+.note-lists li {
   border-bottom: 1px dotted #ccc;
   padding: 15px 30px 15px 0;
   display: block;
   margin-left: 0;
   position: relative;
+
+  label {
+    width: 100%;
+    display: block;
+  }
 }
 
 .del-btn {
   position: absolute;
   right: 0;
-  top: 18px;
+  top: 20px;
 
   &:hover {
     color: #409eff;
