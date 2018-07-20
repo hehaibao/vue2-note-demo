@@ -22,7 +22,7 @@
 
     <div class="note-lists">
        <ul v-if="lists && lists.length">
-        <li v-for="(item, index) in lists" v-model="checkedList" :key="item.title" :label="item.title">
+        <li v-for="(item, index) in lists" v-model="checkedList" :key="item.title">
           <el-checkbox class="ellipsis" :checked="item.checked" @change="handleItemsChange(item)">
             {{ item.title }}
           </el-checkbox>
@@ -30,7 +30,12 @@
           <el-tooltip class="item" effect="dark" content="删除" placement="top">
             <i class="el-icon-delete del-btn" @click.prevent.self="remove(item)"></i>
           </el-tooltip>
+          
         </li>
+        <p class="clear-all">
+          <el-button type="danger" @click="clear">一键清空</el-button>
+        </p>
+       
       </ul>
 
       <p class="empty-tips" v-else>暂无待办事项</p>
@@ -40,9 +45,14 @@
   </div>
 
 </template>
-
 <style lang="scss" scoped>
   @import '../style/home';
+</style>
+
+<style lang="scss">
+  .note-lists li label.is-checked span{
+    text-decoration: line-through;
+  }
 </style>
 
 <script>
@@ -164,6 +174,10 @@
             // 删除单条待办事项
             let index = this.list.indexOf(item);
             this.list.splice(index, 1);
+          },
+          clear() {
+            // 清空
+            this.list = [];
           }
 	    }
 	}
