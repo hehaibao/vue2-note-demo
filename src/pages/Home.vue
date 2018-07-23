@@ -56,6 +56,10 @@
 </style>
 
 <script>
+
+import axios from 'axios'
+import mockdata from "@/router/mockdata"
+
   export default {
 	  	data() {
 	        return {
@@ -103,16 +107,13 @@
 	        this.initData();
 	    },
 	    methods: {
-	        async initData() {
-              // 造数据
-	            this.list = [
-                { title: '5. 签到', checked: true },
-                { title: '4. 09:30 开晨会', checked: false },
-                { title: '3. 公有云 增加新功能', checked: false },
-                { title: '2. 私有云 增加直播', checked: false },
-                { title: '1. Vue学习', checked: false }
-              ];
-              this.type = 'all'; // 默认展示全部的
+	        initData() {
+              // 获取mock数据
+              axios.get('msg').then(res => {
+                  var data = res.data;
+                  this.list = data.lists;
+                  this.type = 'all'; // 默认展示全部的
+              });
 	        },
           changeType(tp) {
               // 切换类型
